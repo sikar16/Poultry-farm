@@ -1,9 +1,7 @@
 const catchAsync = require("../ErrorHandler/catchAsync");
 const AppError = require("../ErrorHandler/appError");
 const authUtils = require("../Utils/authUtils");
-const Photographer = require("../model/photographerModel");
-const Customer = require("../model/customerModel");
-const Admin = require("../model/adminModel");
+const userModel = require("../model/userModel");
 
 exports.protect = catchAsync(async (req, res, next) => {
   let token;
@@ -16,12 +14,29 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
   } else {
     // Handling header doesn't contain AuthorizationToken.
-    next(new AppError("Authentication token not provided", 401));
+    next(
+      new AppError(
+        "Authentication token not provided, Please log in to access this resource.",
+        401
+      )
+    );
     return;
   }
 
   const verified = await authUtils.getUserId(token);
+
   // console.log("verified", verified.id);
+
+  // Check if the user exists
+  const currentUser = await userModel.findById(verified.id);
+  if (!currentUser) {
+    return next(
+      new AppError("The user belonging to this token no longer exists.", 401)
+    );
+  }
+
+  req.user = currentUser; // Grant access to the user
+  // console.log("req.user", req.user);
 
   // passing the id to the next middleware
   req.id = verified.id;
@@ -33,90 +48,103 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.isAdmin = catchAsync(async (req, res, next) => {
-  const id = req.id;
-  // getting the user related to the current token.
-  const admin = await Admin.findById(id);
+// Restrict access based on roles
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    req.role;
+    if (!roles.includes(req.role)) {
+      return next(
+        new AppError("You do not have permission to perform this action", 403)
+      );
+    }
+    next();
+  };
+};
 
-  if (admin.role !== "admin" && admin.role !== "superAdmin") {
-    // not authorized if user doesn't exist!
-    next(new AppError("Not Authorized", 401));
-    return;
-  }
-
-  req.admin = admin;
-
-  next();
-});
-
-exports.isPhotographer = catchAsync(async (req, res, next) => {
-  const id = req.id;
-  // getting the user related to the current token.
-  const photographer = await Photographer.findById(id);
-
-  if (photographer.role !== "photographer") {
-    // not authorized if user doesn't exist!
-    next(new AppError("Not Authorized", 401));
-    return;
-  }
-
-  req.photographer = photographer;
-  next();
-});
-
-exports.isCustomer = catchAsync(async (req, res, next) => {
-  const id = req.id;
-  // getting the user related to the current token.
-  const customer = await Customer.findById(id);
-
-  if (customer.role !== "customer") {
-    // not authorized if user doesn't exist!
-    next(new AppError("Not Authorized", 401));
-    return;
-  }
-
-  req.customer = customer;
-  next();
-});
-
-// exports.loginTokenAdmin = catchAsync(async (req, res) => {
-//   const id = res.locals.id;
+// exports.isAdmin = catchAsync(async (req, res, next) => {
+//   const id = req.id;
 //   // getting the user related to the current token.
 //   const admin = await Admin.findById(id);
-//   if (!admin) {
+
+//   if (admin.role !== "admin" && admin.role !== "superAdmin") {
 //     // not authorized if user doesn't exist!
 //     next(new AppError("Not Authorized", 401));
 //     return;
 //   }
 
-//   res.status(200).json(admin);
+//   req.admin = admin;
+
+//   next();
 // });
 
-// exports.loginTokenCustomer = catchAsync(async (req, res) => {
-//   const id = res.locals.id;
+// exports.isPhotographer = catchAsync(async (req, res, next) => {
+//   const id = req.id;
 //   // getting the user related to the current token.
-//   const user = await Customer.findById(id);
-//   if (!user) {
+//   const photographer = await Photographer.findById(id);
+
+//   if (photographer.role !== "photographer") {
 //     // not authorized if user doesn't exist!
 //     next(new AppError("Not Authorized", 401));
 //     return;
 //   }
 
-//
-
-//   res.status(200).json(user);
+//   req.photographer = photographer;
+//   next();
 // });
-// exports.loginTokenOwner = catchAsync(async (req, res) => {
-//   const id = res.locals.id;
+
+// exports.isCustomer = catchAsync(async (req, res, next) => {
+//   const id = req.id;
 //   // getting the user related to the current token.
-//   const user = await Owner.findById(id);
-//   if (!user) {
+//   const customer = await Customer.findById(id);
+
+//   if (customer.role !== "customer") {
 //     // not authorized if user doesn't exist!
 //     next(new AppError("Not Authorized", 401));
 //     return;
 //   }
 
-//
-
-//   res.status(200).json(user);
+//   req.customer = customer;
+//   next();
 // });
+
+// // exports.loginTokenAdmin = catchAsync(async (req, res) => {
+// //   const id = res.locals.id;
+// //   // getting the user related to the current token.
+// //   const admin = await Admin.findById(id);
+// //   if (!admin) {
+// //     // not authorized if user doesn't exist!
+// //     next(new AppError("Not Authorized", 401));
+// //     return;
+// //   }
+
+// //   res.status(200).json(admin);
+// // });
+
+// // exports.loginTokenCustomer = catchAsync(async (req, res) => {
+// //   const id = res.locals.id;
+// //   // getting the user related to the current token.
+// //   const user = await Customer.findById(id);
+// //   if (!user) {
+// //     // not authorized if user doesn't exist!
+// //     next(new AppError("Not Authorized", 401));
+// //     return;
+// //   }
+
+// //
+
+// //   res.status(200).json(user);
+// // });
+// // exports.loginTokenOwner = catchAsync(async (req, res) => {
+// //   const id = res.locals.id;
+// //   // getting the user related to the current token.
+// //   const user = await Owner.findById(id);
+// //   if (!user) {
+// //     // not authorized if user doesn't exist!
+// //     next(new AppError("Not Authorized", 401));
+// //     return;
+// //   }
+
+// //
+
+// //   res.status(200).json(user);
+// // });

@@ -6,29 +6,30 @@ const userModel = require("../model/userModel");
 exports.register = catchAsync(async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
 
-  const userExists = await userModel.findOne({ email });
-  if (userExists) {
+  const superAdmin = await userModel.findOne({ email });
+  if (superAdmin) {
     return next(
-      new AppError(" user already exist with this email account", 400)
+      new AppError(" Super Admin already exist with this email account", 400)
     );
   }
 
-  const newUser = await userModel.create({
+  const newSuperAdmin = await userModel.create({
     firstName,
     lastName,
     email,
     password,
+    role: "SuperAdmin",
   });
 
-  token = authUtils.signToken(newUser._id, newUser.role);
+  token = authUtils.signToken(newSuperAdmin._id, newSuperAdmin.role);
 
   res.status(201).json({
     data: {
       token,
       data: {
-        newUser,
+        newSuperAdmin,
       },
-      message: "User  registered successfully",
+      message: "SuperAdmin registered successfully",
     },
   });
 });
@@ -42,10 +43,10 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError("Please provide email and password!", 400));
   }
   // get the user by using the email
-  const admin = await userModel.findOne({ email }).select("+password");
+  const superAdmin = await userModel.findOne({ email }).select("+password");
 
   // no user: send error response
-  if (!admin) {
+  if (!superAdmin) {
     return next(
       new AppError(
         "no account found with this email, please register first",
@@ -54,19 +55,19 @@ exports.login = catchAsync(async (req, res, next) => {
     );
   }
   // password compare
-  if (!(await admin.comparePassword(password, admin.password))) {
+  if (!(await superAdmin.comparePassword(password, superAdmin.password))) {
     return next(new AppError("password not much", 400));
   }
 
   // create a token by using the user
-  token = authUtils.signToken(admin._id, admin.role);
+  token = authUtils.signToken(superAdmin._id, superAdmin.role);
   //   console.log(Admin.role);
   // send response
   res.status(200).json({
     data: {
       token,
       data: {
-        admin,
+        superAdmin,
       },
       message: "Log in successfully",
     },

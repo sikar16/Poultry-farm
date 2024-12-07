@@ -1,20 +1,20 @@
 /**
  * @swagger
  * tags:
- *   name: Users
- *   description: User management endpoints
+ *   name: SuperAdmins
+ *   description: SuperAdmin management endpoints
  */
 
 const express = require("express");
-const userController = require("../controllers/userController");
+const superAdminController = require("../controllers/superAdminController");
 const router = express.Router();
 
 /**
  * @swagger
- * /api/user/signup:
+ * /api/superAdmin/signup:
  *   post:
- *     summary: Register a new user
- *     tags: [Users]
+ *     summary: Register a new SuperAdmin
+ *     tags: [SuperAdmins]
  *     requestBody:
  *       required: true
  *       content:
@@ -39,7 +39,7 @@ const router = express.Router();
  *                 format: password
  *     responses:
  *       201:
- *         description: User registered successfully
+ *         description: SuperAdmin registered successfully
  *         content:
  *           application/json:
  *             schema:
@@ -55,14 +55,14 @@ const router = express.Router();
  *       400:
  *         description: Bad Request - Invalid data
  */
-router.post("/signup", userController.register);
+router.post("/signup", superAdminController.register);
 
 /**
  * @swagger
  * /api/superAdmin/login:
  *   post:
- *     summary: Login as user
- *     tags: [Users]
+ *     summary: Login as SuperAdmin
+ *     tags: [SuperAdmins]
  *     requestBody:
  *       required: true
  *       content:
@@ -94,6 +94,6 @@ router.post("/signup", userController.register);
  *       401:
  *         description: Unauthorized - Invalid credentials
  */
-router.post("/login", userController.login);
+router.post("/login", superAdminController.login);
 
 module.exports = router;

@@ -10,15 +10,16 @@ const AppError = require("./ErrorHandler/appError");
 require("dotenv").config();
 
 const PORT = process.env.PORT;
+const HOST = process.env.HOST;
 
 const app = express();
 
 // // cors
-// const corsOptions = {
-//   origin: "*",
-//   credentials: true,
-// };
-app.use(cors());
+const corsOptions = {
+  origin: "*",
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 connectDB();
 mongoose.set("strictQuery", true);
@@ -46,6 +47,16 @@ const { swaggerUi, specs } = require("./swagger");
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // GENERAL ROUTE ENDPOINTS.
+const superAdminRoute = require("./routes/superAdminRouter");
+const userRoutes = require("./routes/userRouter");
+const subscriptionRoutes = require("./routes/subscriptionPlanRouter");
+const farmRoutes = require("./routes/farmRouter");
+
+app.use("/api/superAdmin", superAdminRoute);
+app.use("/api/user", userRoutes);
+app.use("/api/subscription", subscriptionRoutes);
+app.use("/api/farm", farmRoutes);
+
 // ! For showing the client 404 not found when searched for invalid  url.
 app.all("/", (req, res, next) => {
   res
@@ -59,7 +70,7 @@ app.all("*", (req, res, next) => {
 // Global error handler for handling errors globally.
 app.use(globalErrorHandler);
 
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
   console.log(`app is listening on ${PORT}`);
 });
 

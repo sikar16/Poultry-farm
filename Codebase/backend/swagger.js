@@ -6,17 +6,17 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Picture Ethiopia Platform",
+      title: "Poultry-Farm",
       version: "1.0.0",
-      description: "An API for Picture Ethiopia Platform",
+      description: "An API for Poultry-Farm",
     },
     servers: [
+      // {
+      //   url: "https://Poultry-Farm.onrender.com/",
+      //   description: "Production Server",
+      // },
       {
-        url: "https://picture-ethiopia.onrender.com/",
-        description: "Production Server",
-      },
-      {
-        url: "http://localhost:5000/",
+        url: "http://10.141.83.249:8888/",
         description: "Development Server",
       },
     ],
