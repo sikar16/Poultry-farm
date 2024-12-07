@@ -7,6 +7,7 @@ import Nav from "../component/Nav";
 import React from "react";
 import Home from "../component/Home";
 import NotFound from "../component/NotFound";
+import Dashboard from "../layout/Admin/Dashboard";
 
 
 export const router = createBrowserRouter(
@@ -14,7 +15,7 @@ export const router = createBrowserRouter(
         <>
             <Route
                 path="/"
-                element={<Nav />}
+                element={<Dashboard />}
             />
             <Route
                 path="/home"

@@ -1,11 +1,11 @@
 import React from 'react'
 
-function demo() {
+function Hatchlings() {
     return (
         <div>
-
+            Hatchlings
         </div>
     )
 }
 
-export default demo
+export default Hatchlings
