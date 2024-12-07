@@ -5,12 +5,15 @@ import Nav from "./component/Nav"
 
 function App() {
   return (
-    <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] ">
-      <Nav/>
-      <RouterProvider router={router} />
-      
+    <>
 
-    </div>
+      {/* <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] "> */}
+      {/* <Nav /> */}
+      <RouterProvider router={router} />
+
+
+      {/* </div> */}
+    </>
   )
 }
 
