@@ -1,11 +1,13 @@
-import React from 'react'
+import React from 'react';
+import Common from './Common';
 
 function Broilers() {
+
     return (
         <div>
-            Broilers
+            <Common />
         </div>
-    )
+    );
 }
 
-export default Broilers
+export default Broilers;
