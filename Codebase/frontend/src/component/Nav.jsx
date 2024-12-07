@@ -1,8 +1,14 @@
+import { useContext,useState } from "react";
 
 function Nav() {
     return (
         <div>
-            navigation
+            <nav>
+
+
+            </nav>
+
+            
         </div>
     )
 }
