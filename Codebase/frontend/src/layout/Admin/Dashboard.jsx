@@ -2,11 +2,12 @@ import { useState } from 'react';
 import UserTable from '../../feature/User/UserTable';
 import HealthTable from '../../feature/Health/HealthTable';
 import Report from '../../feature/Report/Report';
+import DashboardAnalaysis from '../../feature/Dashboard/DashboardAnalaysis';
 
 
 const Dashboard = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [activeContent, setActiveContent] = useState('dashboard');
+    const [activeContent, setActiveContent] = useState('Dashborad');
 
 
     const toggleDrawer = () => {
@@ -113,11 +114,6 @@ const Dashboard = () => {
                             </button>
                         </li>
 
-
-
-
-
-
                         <li className='flex'>
                             <button
                                 onClick={() => handleContentChange('signout')}
@@ -133,13 +129,16 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Main Content Area */}
 
 
             <div className={`flex-1 p-4 transition-all duration-300 w-screen h-screen max-h-screen  ${isOpen ? 'ml-64 ' : 'ml-0'}`}>
-                {/*  w-screen h-screen max-h-screen */}
                 <div className="flex justify-between text-right mb-4">
-                    <h1 className="text-xl font-semibold">dddddddd</h1>
+                    <h1 className="text-xl font-semibold">
+                        {activeContent === 'Health' && "Health"}
+                        {activeContent === 'User' && "User"}
+                        {activeContent === 'Dashborad' && "Dashborad"}
+                        {activeContent === 'Report' && "Report"}
+                    </h1>
                     <button
                         className="text-white font-medium rounded-lg "
                         type="button"
@@ -154,7 +153,7 @@ const Dashboard = () => {
 
                 {activeContent === 'Dashborad' && (
                     <div>
-                        <p>ppppp</p>
+                        <DashboardAnalaysis />
                     </div>
                 )}
 
