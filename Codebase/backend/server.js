@@ -51,11 +51,19 @@ const superAdminRoute = require("./routes/superAdminRouter");
 const userRoutes = require("./routes/userRouter");
 const subscriptionRoutes = require("./routes/subscriptionPlanRouter");
 const farmRoutes = require("./routes/farmRouter");
+const inventoryRoutes = require("./routes/inventoryRouter");
+const vaccinationRoute = require("./routes/vaccinationScheduleRouter");
+const notificationRoute = require("./routes/notificationRouter");
+const payment = require("./routes/payment");
 
 app.use("/api/superAdmin", superAdminRoute);
 app.use("/api/user", userRoutes);
 app.use("/api/subscription", subscriptionRoutes);
 app.use("/api/farm", farmRoutes);
+app.use("/api/inventory", inventoryRoutes);
+app.use("/api/vaccine", vaccinationRoute);
+app.use("/api/notify", notificationRoute);
+app.use("/api/payment", payment);
 
 // ! For showing the client 404 not found when searched for invalid  url.
 app.all("/", (req, res, next) => {

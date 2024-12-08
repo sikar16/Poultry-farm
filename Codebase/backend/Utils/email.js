@@ -1,24 +1,37 @@
-const { EMAIL, EMAIL_PASSWORD } = require("../Config/Keys");
-const catchAsync = require("../ErrorHandler/catchAsync");
-const nodemailer = require("nodemailer");
+const mailer = require("nodemailer");
+exports.sendEmail = async (options) => {
+  try {
+    // *steps to send email
 
-const Email = catchAsync(async (email, OTP) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: EMAIL,
-      pass: EMAIL_PASSWORD,
-    },
-  });
+    // 1 create a transponder (like gmail)
+    const transponder = mailer.createTransport({
+      // service: 'Gmail',
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
 
-  const mailOptions = {
-    from: EMAIL,
-    to: email,
-    subject: "Password Reset",
-    text: `Your password reset otp is|  ${OTP}  |. If you did not request this, please ignore it. `,
-  };
+      // ! we cannot use gmail for many platforms because its:
+      // 1. only 500 emails are allowed perday
+      // 2. its will mark us as an spammer.
+    });
+    // * 2) define the email
+    // setting required options for email.
+    const mailOptions = {
+      from: "Hello from our system ",
+      to: options.email,
+      subject: options.subject,
+      text: options.message,
+      html: options.message,
+    };
 
-  await transporter.sendMail(mailOptions);
-  console.log(`Email sent successfully to:${email}`);
-});
-module.exports = Email;
+    // * 3) send email
+    const response = await transponder.sendMail(mailOptions);
+
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};

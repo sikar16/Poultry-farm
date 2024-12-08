@@ -3,15 +3,14 @@ const Schema = mongoose.Schema;
 
 const vaccinationScheduleSchema = new Schema(
   {
-    poultryType: {
-      type: String,
-      enum: ["Broiler", "Layer", "Hatchery"],
-      required: true,
-    },
     farm: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Farm",
       required: true,
+    },
+    poultryType: {
+      type: String,
+      enum: ["Broiler", "Layer", "Hatchery"],
     },
     vaccineName: {
       type: String,
@@ -19,19 +18,6 @@ const vaccinationScheduleSchema = new Schema(
     },
     vaccinationDate: {
       type: Date,
-      required: true,
-    },
-    notificationSent: {
-      type: Boolean,
-      default: false, // To avoid duplicate notifications
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
       required: true,
     },
   },

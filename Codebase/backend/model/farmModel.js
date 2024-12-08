@@ -25,9 +25,19 @@ const farmSchema = new Schema(
         ref: "User", // Reference to User model for workers
       },
     ],
+    lastVaccinationDate: {
+      type: Date,
+    },
+    nextVaccinationDate: {
+      type: Date,
+    },
+    numOfBirds: {
+      type: Number,
+      required: true,
+    },
   },
   {
-    timeStamps: true,
+    timestamps: true,
     id: true,
     toJSON: {
       transform(doc, ret) {
@@ -51,6 +61,16 @@ farmSchema.pre("save", async function (next) {
       this.farmType = subscription.planType; // Derive farm type from subscription
     }
   }
+
+  // Calculate next vaccination date if it's not provided
+  if (this.lastVaccinationDate && !this.nextVaccinationDate) {
+    const vaccinationInterval = 30; // Adjust interval if needed
+    this.nextVaccinationDate = new Date(this.lastVaccinationDate);
+    this.nextVaccinationDate.setDate(
+      this.nextVaccinationDate.getDate() + vaccinationInterval
+    );
+  }
+
   next();
 });
 

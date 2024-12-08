@@ -3,13 +3,22 @@ const Subscription = require("../model/subscriptionPlanModel");
 const User = require("../model/userModel");
 const catchAsync = require("../ErrorHandler/catchAsync");
 const AppError = require("../ErrorHandler/appError");
+const inventoryModel = require("../model/inventoryModel");
+const { payment } = require("./paymentController");
+const subscriptionPlanModel = require("../model/subscriptionPlanModel");
 
 exports.createFarm = catchAsync(async (req, res, next) => {
-  const { farmName, location, subscriptionPlan } = req.body;
+  const { farmName, location, subscriptionPlan, numOfBirds } = req.body;
 
   // Ensure the user is a Farm Manager
   if (req.user.role !== "admin") {
     return next(new AppError("Only Farm Managers can create a farm", 403));
+  }
+
+  // Check if the farm name already exists
+  const existingFarm = await Farm.findOne({ farmName });
+  if (existingFarm) {
+    return next(new AppError("Farm with this name already exists", 400));
   }
 
   // Check if the subscription plan exists
@@ -24,16 +33,37 @@ exports.createFarm = catchAsync(async (req, res, next) => {
     location,
     subscriptionPlan,
     farmOwner: req.id,
+    numOfBirds,
   });
+  console.log(newFarm);
+  // Add initial inventory entry for birds
+  if (numOfBirds > 0) {
+    await inventoryModel.create({
+      farm: newFarm.id,
+      type: "Bird",
+      details: {
+        bird: {
+          poultryType: plan.planType, // Derived from the subscription plan
+          age: 0, // Newborn birds start with age 0 weeks
+          healthStatus: "Healthy",
+        },
+      },
+      quantity: numOfBirds,
+    });
+  }
+
+  const paymentLink = await payment(plan.price);
 
   res.status(201).json({
     status: "success",
     data: {
       farm: newFarm,
+      paymentLink,
     },
     message: "Farm created successfully",
   });
 });
+
 // Update farm location by farm owner
 exports.updateFarmLocation = catchAsync(async (req, res, next) => {
   const { farmId } = req.params;

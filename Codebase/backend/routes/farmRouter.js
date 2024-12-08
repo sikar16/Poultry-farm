@@ -35,6 +35,8 @@ const router = express.Router();
  *               farmName:
  *                 type: string
  *                 description: Name of the farm
+ *               numbersOfBird:
+ *                  type: string
  *               location:
  *                 type: string
  *                 description: Location of the farm

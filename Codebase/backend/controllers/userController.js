@@ -4,7 +4,7 @@ const authUtils = require("../Utils/authUtils");
 const userModel = require("../model/userModel");
 
 exports.register = catchAsync(async (req, res, next) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, phoneNumber, password } = req.body;
 
   const userExists = await userModel.findOne({ email });
   if (userExists) {
@@ -17,6 +17,7 @@ exports.register = catchAsync(async (req, res, next) => {
     firstName,
     lastName,
     email,
+    phoneNumber,
     password,
   });
 
@@ -70,5 +71,65 @@ exports.login = catchAsync(async (req, res, next) => {
       },
       message: "Log in successfully",
     },
+  });
+});
+exports.getAllUser = catchAsync(async (req, res, next) => {
+  // Get the 'role' query parameter
+  const { role } = req.query;
+
+  // If a role is provided, filter users by the role
+  let query = {};
+  if (role) {
+    // Ensure the role is one of the allowed values
+    const validRoles = [
+      "admin",
+      "SuperAdmin",
+      "farmWorker",
+      "poultrySpecialist",
+    ];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Invalid role parameter",
+      });
+    }
+    query.role = role; // Add the role filter to the query
+  }
+
+  // Fetch users based on the query filter
+  const users = await userModel.find(query);
+
+  res.status(200).json({
+    status: "success",
+    data: users,
+    message: `Fetched ${users.length} users successfully`,
+  });
+});
+exports.getAllAdmins = catchAsync(async (req, res, next) => {
+  const admins = await userModel.find({ role: "admin" });
+
+  res.status(200).json({
+    status: "success",
+    data: admins,
+  });
+});
+exports.getAllUsersCreatedByAdmins = catchAsync(async (req, res, next) => {
+  // Fetch all farms and populate farm owner details
+  const farms = await Farm.find().populate("farmOwner", "name role");
+
+  // Filter unique admins who own farms
+  const admins = [
+    ...new Map(
+      farms.map((farm) => [farm.farmOwner._id.toString(), farm.farmOwner])
+    ).values(),
+  ];
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      admins,
+      farms,
+    },
+    message: `Fetched ${admins.length} admins and their farms successfully`,
   });
 });

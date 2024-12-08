@@ -16,7 +16,7 @@ const options = {
       //   description: "Production Server",
       // },
       {
-        url: "http://10.141.83.249:8888/",
+        url: "http://192.168.0.5:8888/",
         description: "Development Server",
       },
     ],

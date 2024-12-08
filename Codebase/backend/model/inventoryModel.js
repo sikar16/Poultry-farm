@@ -10,7 +10,7 @@ const inventorySchema = new Schema(
     },
     type: {
       type: String,
-      enum: ["Bird", "Egg", "Feed", "Medication", "Miscellaneous"],
+      enum: ["Bird", "Egg", "Feed"],
       required: true,
     },
     details: {
@@ -20,7 +20,7 @@ const inventorySchema = new Schema(
         healthStatus: { type: String, default: "Healthy" }, // e.g., Healthy, Sick, etc.
       },
       egg: {
-        quality: { type: String, enum: ["A", "B", "C"] }, // Quality grades
+        quality: { type: String, enum: ["Healthy", "Bad"] }, // Quality grades
         collectedDate: { type: Date },
       },
       feed: {
@@ -28,36 +28,24 @@ const inventorySchema = new Schema(
         quantity: { type: Number }, // Weight in kg
         unit: { type: String, default: "kg" }, // Default unit is kilograms
       },
-      medication: {
-        medicationName: { type: String },
-        dosage: { type: String },
-        expiryDate: { type: Date },
-      },
-      miscellaneous: {
-        itemName: { type: String },
-        description: { type: String },
-      },
     },
     quantity: {
       type: Number,
       required: true,
+      min: [0, "Quantity cannot be negative"], // Validation for stock levels
     },
     unit: {
       type: String,
       default: "count", // Default for most inventory types
     },
-    addedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // Tracks who added the inventory item
-      required: true,
-    },
+
     createdAt: {
       type: Date,
       default: Date.now,
     },
   },
   {
-    timeStamps: true,
+    timestamps: true,
     id: true,
     toJSON: {
       transform(doc, ret) {
@@ -68,5 +56,37 @@ const inventorySchema = new Schema(
     },
   }
 );
+
+// Middleware to validate `details` based on `type`
+inventorySchema.pre("save", function (next) {
+  if (this.type === "Bird" && !this.details.bird) {
+    return next(new Error("Bird details must be provided for type 'Bird'."));
+  }
+  if (this.type === "Egg" && !this.details.egg) {
+    return next(new Error("Egg details must be provided for type 'Egg'."));
+  }
+  if (this.type === "Feed" && !this.details.feed) {
+    return next(new Error("Feed details must be provided for type 'Feed'."));
+  }
+  next();
+});
+// Ensure poultryType aligns with the farm's subscription plan
+inventorySchema.pre("save", async function (next) {
+  if (this.type === "Bird") {
+    const farm = await mongoose
+      .model("Farm")
+      .findById(this.farm)
+      .populate("subscriptionPlan");
+    if (!farm) {
+      return next(new Error("Associated farm not found."));
+    }
+    if (this.details.bird.poultryType !== farm.subscriptionPlan.planType) {
+      return next(
+        new Error("Poultry type does not match the farm's subscription plan.")
+      );
+    }
+  }
+  next();
+});
 
 module.exports = mongoose.model("Inventory", inventorySchema);
