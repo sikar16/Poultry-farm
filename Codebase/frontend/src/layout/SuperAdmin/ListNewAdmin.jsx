@@ -1,19 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
     MaterialReactTable,
     useMaterialReactTable,
 } from 'material-react-table';
 import {
     Box,
-    Button,
-    Dialog,
-    DialogTitle,
-    Menu,
-    MenuItem,
     TextField,
 } from '@mui/material';
-import { users } from '../../demo/demo'; // Import your user data
-import AddUser from './Form/AddUser';
 import { useGetAlluserQuery } from '../../service/userRegestration_service';
 
 const CustomToolbar = ({ table }) => {
@@ -30,43 +23,9 @@ const CustomToolbar = ({ table }) => {
     );
 };
 
-const UserTable = () => {
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [openAdd, setOpenAdd] = useState(false);
-
-    const { data, error, isLoading } = useGetAlluserQuery();
-
-    console.log(data)
-
-    const handleClickOpenAdd = () => {
-        setOpenAdd(true);
-    };
-
-    const handleClickCloseAdd = () => {
-        setOpenAdd(false);
-    };
-
-    const handleMenuClick = (event, user) => {
-        setAnchorEl(event.currentTarget);
-        setSelectedUser(user);
-    };
-
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        setSelectedUser(null);
-    };
-
-    const handleAssignRole = () => {
-        // Implement role assignment logic
-        console.log(`Assign role for ${selectedUser.fullName}`);
-        handleMenuClose();
-    };
-
-    const handleToggleStatus = () => {
-        console.log(`Toggle status for ${selectedUser.fullName}`);
-        handleMenuClose();
-    };
+const ListNewAdmin = () => {
+    // Fetch all users
+    const { isError, isLoading, data = [], refetch } = useGetAlluserQuery();
 
     const columns = useMemo(() => [
         {
@@ -99,27 +58,11 @@ const UserTable = () => {
             header: 'Status',
             size: 100,
         },
-        {
-            id: 'action',
-            header: 'Action',
-            size: 100,
-            Cell: ({ row }) => (
-                <Box>
-                    <Button
-                        onClick={(e) => handleMenuClick(e, row.original)}
-                        variant="text"
-                        sx={{ color: 'gray' }}
-                    >
-                        ⋮
-                    </Button>
-                </Box>
-            ),
-        },
     ], []);
 
     const table = useMaterialReactTable({
         columns,
-        data: users,
+        data: data.filter(user => user.role === 'admin'), // Filter for admin users
         enableRowActions: false,
         enableColumnFilterModes: true,
         enableColumnOrdering: true,
@@ -146,10 +89,17 @@ const UserTable = () => {
         },
     });
 
+    const handleClickOpenAdd = () => {
+        // Logic to open a modal or form to add a new user
+    };
+
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error fetching users.</div>;
+
     return (
         <>
             <div className="flex justify-between my-4 items-center">
-                <p className="ms-4 text-2xl font-semibold text-gray-800">Users</p>
+                <p className="ms-4 text-2xl font-semibold text-gray-800">Admins</p>
                 <button onClick={handleClickOpenAdd}
                     className="bg-[#CB771C] text-white rounded px-4 py-2 flex items-center"
                 >
@@ -160,27 +110,8 @@ const UserTable = () => {
                 </button>
             </div>
             <MaterialReactTable table={table} />
-            <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-            >
-                <MenuItem onClick={handleAssignRole}>Update Role</MenuItem>
-                <MenuItem onClick={handleToggleStatus}> Status</MenuItem>
-            </Menu>
-
-            <Dialog open={openAdd} onClose={handleClickCloseAdd}>
-                <DialogTitle className="text-lg font-semibold text-gray-700 flex justify-between">
-                    <p>
-                        Add User
-                    </p>
-                    <p>x</p>
-                </DialogTitle>
-                <hr className='text-black shadow-lg my-2' />
-                <AddUser onClose={handleClickCloseAdd} />
-            </Dialog>
         </>
     );
 };
 
-export default UserTable;
+export default ListNewAdmin;

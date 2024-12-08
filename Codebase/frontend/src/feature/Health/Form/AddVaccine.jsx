@@ -24,10 +24,21 @@ const AddVaccine = ({ onClose }) => {
                             placeholder="Vaccine name"
                             type="text"
                             id="vaccineName"
-                            {...register("vaccineName", { required: "Full name is required" })}
+                            {...register("vaccineName", { required: "vaccine name is required" })}
                             className="focus:outline-none mt-1 text-sm ps-3 block w-full rounded-md border-gray-300 shadow-sm bg-slate-100 py-2 transition duration-200 ease-in-out hover:bg-slate-200"
                         />
                         <p className="text-red-600 text-[13px] mt-1">{errors.vaccineName?.message}</p>
+                    </div>
+                    <div>
+                        <label htmlFor="vaccineName" className="block text-sm font-medium text-gray-700">Vaccination Date </label>
+                        <input
+                            placeholder="Vaccine date"
+                            type="text"
+                            id="vaccineDate"
+                            {...register("vaccineName", { required: "vaccine date is required" })}
+                            className="focus:outline-none mt-1 text-sm ps-3 block w-full rounded-md border-gray-300 shadow-sm bg-slate-100 py-2 transition duration-200 ease-in-out hover:bg-slate-200"
+                        />
+                        <p className="text-red-600 text-[13px] mt-1">{errors.vaccineDate?.message}</p>
                     </div>
                     <div className="flex justify-center">
                         <button

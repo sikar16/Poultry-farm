@@ -4,7 +4,7 @@ import hero from "../../assets/download.jpeg"
 
 function Hero() {
     return (
-        <div className="relative bg-green-900 text-white h-screen flex flex-col justify-center items-center text-center">
+        <div id="home" className="relative bg-green-900 text-white h-screen flex flex-col justify-center items-center text-center">
             <div className="absolute inset-0">
                 <img
                     src={hero} // Replace with your image URL

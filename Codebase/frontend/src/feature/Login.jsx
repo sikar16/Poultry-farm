@@ -1,11 +1,43 @@
 import React, { useState } from 'react';
-
+import { useLoginUserMutation } from '../service/loginApi';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [login, { isLoading }] = useLoginUserMutation();
+    const { fetchData } = useAuth();
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
+
+
+        const response = await login({ email, password }).unwrap();
+        console.log('API Response:', response.data.token);
+        if (response && response.data.token) {
+            localStorage.setItem("token", JSON.stringify({ token: response.data.token }));
+            fetchData();
+            const role = response.data.data.admin.role;
+            console.log('User Role:', role);
+            if (role === 'SuperAdmin') {
+                return navigate("/supAdmin/");
+            }
+            else if (role === 'admin') {
+                return navigate("/admin");
+            }
+            if (role === 'farmWorker') {
+                return navigate("/");
+            }
+            if (role === 'poultrySpecialist') {
+                return navigate("/");
+            }
+        } else {
+            console.error('Login failed: Invalid response structure');
+        }
+
     };
 
     return (
@@ -43,9 +75,10 @@ function Login() {
                     </div>
                     <button
                         type="submit"
-                        className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300 w-full"
+                        className={`bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300 w-full ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={isLoading}
                     >
-                        Login
+                        {isLoading ? 'Loading...' : 'Login'}
                     </button>
                 </form>
                 <p className="text-center text-gray-600 mt-4">

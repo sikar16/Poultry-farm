@@ -7,20 +7,20 @@ function About() {
     return (
         <>
 
-            <div className="max-w-7xl mx-auto p-6 flex flex-col lg:flex-row bg-white rounded-lg shadow-lg">
+            <div id="about" className="max-w-7xl mx-auto p-6 flex flex-col lg:flex-row bg-white rounded-lg shadow-lg">
                 {/* Left Section - Image and Welcome Message */}
                 <div className="flex p-6">
                     <div>
-                        <h1 className="text-4xl font-bold text-green-800 mb-4">Welcome to Our Farm!</h1>
+                        <h1 className="text-4xl font-bold text-green-800 mb-4">Welcome to Our doroSAAS!</h1>
                         <p className="text-lg text-gray-700 mb-4">
-                            At Poultry SAS, we are dedicated to revolutionizing the poultry farming industry through innovative software solutions.
+                            At  doroSAS, we are dedicated to revolutionizing the poultry farming industry through innovative software solutions.
                         </p>
                         <p className="text-lg text-gray-700 mb-6">
                             Our platform provides farmers with the tools they need to manage their operations efficiently and sustainably.
                         </p>
                         <div className="bg-yellow-300 p-4 rounded-lg text-center text-lg font-bold">
                             42 <br />
-                            Trusted by Our Farm Managemnet
+                            Trusted by  Farm Managers
                         </div>
                     </div>
 

@@ -3,6 +3,7 @@ import UserTable from '../../feature/User/UserTable';
 import HealthTable from '../../feature/Health/HealthTable';
 import Report from '../../feature/Report/Report';
 import DashboardAnalaysis from '../../feature/Dashboard/DashboardAnalaysis';
+// import DashboardAnalaysis from '../../feature/Dashboard/DashboardAnalaysis';
 
 
 const Dashboard = () => {
