@@ -3,10 +3,10 @@ import extractErrorMessage from '../util/extractErrorMessage';
 import { getToken } from "../util/getToken"
 const baseUrl = import.meta.env.VITE_API_URL;
 
-export const userRegistrationServiceApi = createApi({
-    reducerPath: 'userRegistrationServiceApi',
+export const adminApi = createApi({
+    reducerPath: 'adminApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${baseUrl}`,
+        baseUrl: `${baseUrl}user`,
         prepareHeaders: async (headers) => {
             const token = await getToken();
             if (token) {
@@ -16,36 +16,25 @@ export const userRegistrationServiceApi = createApi({
         },
     }),
 
-    tagTypes: ["user"],
+    tagTypes: ["admin"],
     endpoints: (builder) => ({
-        getAlluser: builder.query({
-            query: () => ({
-                url: 'user/admin',
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }),
-            transformResponse: (response) =>
-                response.success ? response.data : [],
-            providesTags: ["user"],
-        }),
-        addNewuser: builder.mutation({
+
+        addNewFarmdata: builder.mutation({
             query: (data) => ({
-                url: 'user/signup',
+                url: '/farm',
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: data,
             }),
-            invalidatesTags: ["user"],
+            invalidatesTags: ["farmData"],
             transformErrorResponse: (response) => {
-                const message = response?.data?.message || "Unknown error";
+                const message = response?.data.data;
                 return extractErrorMessage(message);
             },
         }),
     }),
 });
 
-export const { useAddNewuserMutation, useGetAlluserQuery } = userRegistrationServiceApi;
+export const { useAddNewFarmdataMutation } = adminApi;

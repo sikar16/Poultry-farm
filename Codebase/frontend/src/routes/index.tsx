@@ -21,6 +21,7 @@ import DashboardSA from "../layout/SuperAdmin/DashboardSA";
 import FarmDataForm from "../layout/Admin/FarmDataForm.jsx";
 
 import DashboardAd from "../layout/Admin/DashboardAd.jsx";
+import ListNewAdmin from "../layout/SuperAdmin/ListNewAdmin.jsx";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -41,9 +42,9 @@ export const router = createBrowserRouter(
 
             { /**SuperAdmin */}
 
-            <Route path="/supAdmin">
-                <Route path="/supAdmin/dashboard" element={<DashboardSA />} />
-            </Route>
+
+            <Route path="/supAdmin/" element={<ListNewAdmin />} />
+
 
 
 

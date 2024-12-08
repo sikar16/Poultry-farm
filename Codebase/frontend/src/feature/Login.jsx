@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLoginUserMutation } from '../service/loginApi';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

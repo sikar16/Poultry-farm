@@ -11,14 +11,14 @@ export default function LanguageDropdown() {
         <div className="mx-2 w-auto text-[black] bg-none">
 
             <select
-                className="form-select bg-red-700 rounded-sm items-center align-middle justify-center outline-none "
+                className="form-select bg-white rounded-sm items-center align-middle justify-center outline-none "
                 id="language-dropdown"
                 value={i18n.language}
                 onChange={(e) => changeLanguage(e.target.value)}
             >
                 <option value="en">Eng</option>
                 <option value="am">አማርኛ</option>
-                <option value="om">Afaan</option>
+                <option value="om">Oro</option>
             </select>
         </div>
     );

@@ -3,6 +3,8 @@ import UserTable from '../../feature/User/UserTable';
 import HealthTable from '../../feature/Health/HealthTable';
 import Report from '../../feature/Report/Report';
 import DashboardAnalaysis from '../../feature/Dashboard/DashboardAnalaysis';
+import { useAuth } from '../../context/AuthContext';
+import Bottom from '../../component/Bottem';
 // import DashboardAnalaysis from '../../feature/Dashboard/DashboardAnalaysis';
 
 
@@ -10,7 +12,16 @@ const Dashboard = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [activeContent, setActiveContent] = useState('Dashborad');
 
+    const { setUserData } = useAuth();
 
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("token2");
+        setUserData({ firstName: "", id: 0, role: "", token: null });
+        navigator("/login");
+
+        window.location.reload();
+    };
     const toggleDrawer = () => {
         setIsOpen(!isOpen);
     };
@@ -120,10 +131,8 @@ const Dashboard = () => {
                                 onClick={() => handleContentChange('signout')}
                                 className={`flex items-center py-2 px-4 rounded-lg w-full text-left ${activeContent === 'signout' ? 'bg-[#CB771C] text-white ' : 'text-gray-900  hover:bg-gray-100 '}`}
                             >
-                                <p>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" ><path fill={`${activeContent === 'signout' ? "white" : "black"}`} d="M17 2H7C5.3 2 4 3.3 4 5v6h8.6l-2.3-2.3c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l4 4c.4.4.4 1 0 1.4l-4 4c-.4.4-1 .4-1.4 0s-.4-1 0-1.4l2.3-2.3H4v6c0 1.7 1.3 3 3 3h10c1.7 0 3-1.3 3-3V5c0-1.7-1.3-3-3-3"></path></svg>
-                                </p>
-                                <span className="flex-1 ms-3 " >Sign out</span>
+
+                                <Bottom />
                             </button>
                         </li>
                     </ul>
@@ -177,11 +186,6 @@ const Dashboard = () => {
                     </div>
                 )}
 
-                {activeContent === 'signout' && (
-                    <div>
-                        <p>Are you sure to signout</p>
-                    </div>
-                )}
 
             </div>
         </div>

@@ -6,6 +6,7 @@ import {
 import {
     Box,
     TextField,
+    Button,
 } from '@mui/material';
 import { useGetAlluserQuery } from '../../service/userRegestration_service';
 
@@ -25,7 +26,10 @@ const CustomToolbar = ({ table }) => {
 
 const ListNewAdmin = () => {
     // Fetch all users
-    const { isError, isLoading, data = [], refetch } = useGetAlluserQuery();
+    const { isError, isLoading, data = [] } = useGetAlluserQuery();
+
+    // Filter for admin users
+    const adminData = data.filter(user => user.role === 'admin');
 
     const columns = useMemo(() => [
         {
@@ -62,7 +66,7 @@ const ListNewAdmin = () => {
 
     const table = useMaterialReactTable({
         columns,
-        data: data.filter(user => user.role === 'admin'), // Filter for admin users
+        data: adminData, // Use filtered admin users
         enableRowActions: false,
         enableColumnFilterModes: true,
         enableColumnOrdering: true,
@@ -73,13 +77,8 @@ const ListNewAdmin = () => {
         initialState: {
             showColumnFilters: true,
             showGlobalFilter: true,
-            columnPinning: {
-                left: ['mrt-row-expand', 'mrt-row-select'],
-                right: ['mrt-row-actions'],
-            },
         },
         paginationDisplayMode: 'pages',
-        positionToolbarAlertBanner: 'bottom',
         renderToolbar: (props) => <CustomToolbar table={props.table} />,
         muiPaginationProps: {
             color: 'secondary',
@@ -100,14 +99,17 @@ const ListNewAdmin = () => {
         <>
             <div className="flex justify-between my-4 items-center">
                 <p className="ms-4 text-2xl font-semibold text-gray-800">Admins</p>
-                <button onClick={handleClickOpenAdd}
-                    className="bg-[#CB771C] text-white rounded px-4 py-2 flex items-center"
+                <Button
+                    onClick={handleClickOpenAdd}
+                    variant="contained"
+                    color="primary"
+                    sx={{ backgroundColor: '#CB771C', '&:hover': { backgroundColor: '#A85C14' } }}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" className="mr-2">
                         <path fill="white" d="M12.75 7a.75.75 0 0 0-1.5 0v4.25H7a.75.75 0 0 0 0 1.5h4.25V17a.75.75 0 0 0 1.5 0v-4.25H17a.75.75 0 0 0 0-1.5h-4.25z"></path>
                     </svg>
                     Add User
-                </button>
+                </Button>
             </div>
             <MaterialReactTable table={table} />
         </>
