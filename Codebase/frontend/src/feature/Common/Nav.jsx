@@ -11,6 +11,7 @@ function Nav() {
     const { t } = useTranslation();
     const { isLoggedIn } = useAuth();
 
+
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };

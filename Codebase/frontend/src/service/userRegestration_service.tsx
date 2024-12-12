@@ -27,7 +27,7 @@ export const userRegistrationServiceApi = createApi({
                 },
             }),
             transformResponse: (response) =>
-                response.success ? response.data : [],
+                response.success ? response.data : response.data,
             providesTags: ["user"],
         }),
         addNewuser: builder.mutation({

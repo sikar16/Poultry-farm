@@ -2,8 +2,11 @@ import React from 'react';
 import { FaCheckCircle } from 'react-icons/fa';
 import hero from "../../assets/download.jpeg"
 import Products from './Products';
+import { useTranslation } from 'react-i18next';
 
 function About() {
+    const { t } = useTranslation();
+
     return (
         <>
 
@@ -11,16 +14,16 @@ function About() {
                 {/* Left Section - Image and Welcome Message */}
                 <div className="flex p-6">
                     <div>
-                        <h1 className="text-4xl font-bold text-green-800 mb-4">Welcome to Our doroSAAS!</h1>
+                        <h1 className="text-4xl font-bold text-green-800 mb-4">{t('welcomeTitle')}</h1>
                         <p className="text-lg text-gray-700 mb-4">
-                            At  doroSAS, we are dedicated to revolutionizing the poultry farming industry through innovative software solutions.
+                            {t('welcomeDescription')}
                         </p>
                         <p className="text-lg text-gray-700 mb-6">
-                            Our platform provides farmers with the tools they need to manage their operations efficiently and sustainably.
+                            {t('headerSubtitle')}
                         </p>
                         <div className="bg-yellow-300 p-4 rounded-lg text-center text-lg font-bold">
                             42 <br />
-                            Trusted by  Farm Managers
+                            {t('trustedByDescription')}
                         </div>
                     </div>
 
@@ -36,7 +39,7 @@ function About() {
 
                 {/* Features Section */}
                 <div className="mt-8 lg:mt-12 w-full">
-                    <h2 className="text-3xl font-semibold text-green-600 mb-4">What We Offer</h2>
+                    <h2 className="text-3xl font-semibold text-green-600 mb-4">{t('offeringsTitle')}</h2>
                     <ul className="list-disc list-inside space-y-4 mb-6">
                         <table>
                             <tr>
@@ -46,19 +49,19 @@ function About() {
                         </table>
                         <li className="flex items-center">
                             <FaCheckCircle className="text-green-500 mr-2" />
-                            Poultry Management Software: Comprehensive tools for tracking bird health and production metrics.
+                            {t('offeringsItem1')}
                         </li>
                         <li className="flex items-center">
                             <FaCheckCircle className="text-green-500 mr-2" />
-                            Data Analytics: Insights and reports that help farmers make informed decisions based on real-time data.
+                            {t('offeringsItem2')}
                         </li>
                         <li className="flex items-center">
                             <FaCheckCircle className="text-green-500 mr-2" />
-                            Cloud-Based Solutions: Access your data from anywhere, ensuring you stay connected with your operations.
+                            {t('offeringsItem3')}
                         </li>
                         <li className="flex items-center">
                             <FaCheckCircle className="text-green-500 mr-2" />
-                            Customer Support: Our dedicated support team is here to assist you with any questions.
+                            {t('offeringsItem4')}
                         </li>
                     </ul>
                 </div>

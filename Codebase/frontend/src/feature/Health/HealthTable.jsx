@@ -31,8 +31,8 @@ const HealthTable = () => {
     // Ensure the data is in a flat format suitable for the table
     const tableData = useMemo(() => {
         if (!data) return [];
-        return data.map((item) => ({
-            id: item.id,
+        return data.map((item, index) => ({
+            id: index + 1,
             vaccineName: item.vaccineName || 'N/A', // Safely access vaccineName
             vaccinationDate: item.vaccinationDate, // Assuming this is directly accessible
         }));

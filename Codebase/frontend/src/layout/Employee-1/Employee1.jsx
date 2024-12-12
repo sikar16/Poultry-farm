@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import DailyReport from '../../feature/Report/Reports/dailyReport';
+import DailyReport from '../../feature/Report/Reports/DailyReportInv';
+import Bottom from '../../component/Bottem';
+import DailyReportInv from '../../feature/Report/Reports/DailyReportInv';
+import Dashboard1 from './Dashboard1';
 
-const Dashboard = () => {
+const Employee1 = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [activeContent, setActiveContent] = useState('dashboard');
+    const [activeContent, setActiveContent] = useState('Dashboard');
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);
@@ -15,18 +18,17 @@ const Dashboard = () => {
 
     return (
         <div className="flex">
-            <div className={`fixed top-0 left-0 z-40 w-64 h-screen p-3 overflow-y-auto transition-transform border-r-2 ${isOpen ? 'translate-x-0' : '-translate-x-full'} bg-white`} aria-labelledby="drawer-navigation-label">
+            <div className={`fixed top-0 left-0 z-40 w-64 h-screen px-3 pt-3 pb-1 overflow-y-auto transition-transform border-r-2 ${isOpen ? 'translate-x-0' : '-translate-x-full'} bg-white`} aria-labelledby="drawer-navigation-label">
                 <div id="drawer-navigation-label" className="text-base font-semibold flex align-middle items-center text-center gap-4 text-gray-500">
-                    <div className="flex items-center justify-center bg-[#CB771C] rounded-full w-12 h-12">
-                        <div className="flex items-center">
-                            <span className="text-xl font-bold text-white"></span>
-                            <span className="text-xl font-bold text-white"></span>
-                        </div>
+                    <div className="bg-[#CB771C] w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold">
+                        🐔
                     </div>
                     <div>
                         <p className='text-xl text-black'>Efa Poultry</p>
+
                     </div>
                 </div>
+                <p className='text-[10px] text-center text-gray-500'>Feed worker</p>
                 <button
                     type="button"
                     onClick={toggleDrawer}
@@ -72,17 +74,9 @@ const Dashboard = () => {
                             </button>
                         </li>
                         <li className='flex'>
-                            <button
-                                onClick={() => handleContentChange('signout')}
-                                className={`flex items-center py-2 px-4 rounded-lg w-full text-left ${activeContent === 'signout' ? 'bg-[#CB771C] text-white' : 'text-gray-900 hover:bg-gray-100'}`}
-                            >
-                                <p>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24">
-                                        <path fill={activeContent === 'signout' ? "white" : "black"} d="M17 2H7C5.3 2 4 3.3 4 5v6h8.6l-2.3-2.3c-.4-.4-.4-1 0-1.4s1-.4 1.4 0l4 4c.4.4.4 1 0 1.4l-4 4c-.4.4-1 .4-1.4 0s-.4-1 0-1.4l2.3-2.3H4v6c0 1.7 1.3 3 3 3h10c1.7 0 3-1.3 3-3V5c0-1.7-1.3-3-3-3"></path>
-                                    </svg>
-                                </p>
-                                <span className="flex-1 ms-3">Sign out</span>
-                            </button>
+
+                            <Bottom />
+
                         </li>
                     </ul>
                 </div>
@@ -114,24 +108,20 @@ const Dashboard = () => {
 
                 {activeContent === 'Dashboard' && (
                     <div>
-                        <p>Welcome to the dashboard!</p>
+                        <Dashboard1 />
                     </div>
                 )}
 
                 {activeContent === 'Report' && (
                     <div>
-                        <DailyReport />
+                        <DailyReportInv />
                     </div>
                 )}
 
-                {activeContent === 'signout' && (
-                    <div>
-                        <p>Are you sure you want to sign out?</p>
-                    </div>
-                )}
+
             </div>
         </div>
     );
 };
 
-export default Dashboard;
+export default Employee1;

@@ -10,7 +10,7 @@ import NotFound from "../component/NotFound";
 import Dashboard from "../layout/Admin/DashboardAd.jsx";
 import Layout from "../layout/layout"
 import Home from "../layout/Home/Home";
-import Employee from "../layout/Employee-1/Employee"
+import Employee from "../layout/Employee-1/Employee1.jsx"
 import Footer from "../component/Footer"
 import About from "../feature/Common/About";
 import Services from "../feature/Common/Services";
@@ -22,8 +22,11 @@ import FarmDataForm from "../layout/Admin/FarmDataForm.jsx";
 
 import DashboardAd from "../layout/Admin/DashboardAd.jsx";
 import ListNewAdmin from "../layout/SuperAdmin/ListNewAdmin.jsx";
+import Employee1 from "../layout/Employee-1/Employee1.jsx";
+import Employee2 from "../layout/Employee-2/Employee2.jsx";
 
 export const router = createBrowserRouter(
+
     createRoutesFromElements(
         <>
 
@@ -32,18 +35,20 @@ export const router = createBrowserRouter(
                 path="/"
                 element={<Home />}
             />
-
-
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/" element={<Home />} />
-
-
-
             { /**SuperAdmin */}
 
 
             <Route path="/supAdmin/" element={<ListNewAdmin />} />
+
+
+            { /**isFarmWorker */}
+            <Route path="/farmWorker" element={<Employee1 />} />
+
+
+            { /**isPoultrySpecialist */}
+            <Route path="/poultrySpecialist" element={<Employee2 />} />
 
 
 
@@ -62,6 +67,8 @@ export const router = createBrowserRouter(
                 <Route path="/admin/report/layers" element={<p>layers</p>} />
                 <Route path="/admin/report/hatchlings" element={<p>hatchlings</p>} />
             </Route >
+
+
 
 
 

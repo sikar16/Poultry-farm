@@ -1,7 +1,7 @@
 export const users = [
-    { id: 1, fullName: 'John Doe', email: 'john@example.com', phoneNumber: '123-456-7890', role: 'Admin', status: 'Active' },
-    { id: 2, fullName: 'Jane Smith', email: 'jane@example.com', phoneNumber: '987-654-3210', role: 'User', status: 'Inactive' },
-    { id: 3, fullName: 'Alice Johnson', email: 'alice@example.com', phoneNumber: '555-123-4567', role: 'User', status: 'Active' },
+    { id: 1, fullName: 'Mekdelawit Getu', email: 'delawit@gmail.com', phoneNumber: '093 555 67 77', role: 'poultrySpecialist', status: 'Active' },
+    { id: 2, fullName: 'Efa Shasho', email: 'efa@gmail.com', phoneNumber: '0967 55 00 77', role: 'farmWorker', status: 'Active' },
+    { id: 3, fullName: 'Wdase Yohannes', email: 'wdase@gmail.com', phoneNumber: '094 033 66 88', role: 'farmWorker', status: 'Active' },
 ];
 
 

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import {
     MaterialReactTable,
     useMaterialReactTable,
@@ -8,7 +9,18 @@ import {
     TextField,
     Button,
 } from '@mui/material';
-import { useGetAlluserQuery } from '../../service/userRegestration_service';
+
+// Sample demo data
+const demoData = {
+    status: "success",
+    data: [
+        { firstName: "admin", lastName: "admin", email: "admin@gmail.com", role: "admin", status: "Active", id: "6753b4166a1a93545c6d66f6" },
+        { firstName: "admin", lastName: "admin", email: "admin1@gmail.com", role: "admin", status: "Active", id: "6753b6cc78a279834ac9b8fd" },
+        { firstName: "string", lastName: "string", email: "user@example.com", role: "admin", status: "Active", id: "6753dbdf51cba275b9fbf248" },
+        { firstName: "siker", lastName: "yosef", email: "sikar@gmail.com", role: "admin", status: "Active", id: "6753eede9ad03ed84eb98a47" },
+        // Add more demo users as needed
+    ]
+};
 
 const CustomToolbar = ({ table }) => {
     return (
@@ -25,11 +37,22 @@ const CustomToolbar = ({ table }) => {
 };
 
 const ListNewAdmin = () => {
-    // Fetch all users
-    const { isError, isLoading, data = [] } = useGetAlluserQuery();
+    const navigate = useNavigate(); // Initialize the navigate function
+    const data = demoData;
 
-    // Filter for admin users
-    const adminData = data.filter(user => user.role === 'admin');
+    // Map data to the expected format
+    const formattedData = useMemo(() => {
+        if (data?.status === 'success' && Array.isArray(data.data)) {
+            return data.data.map((user, index) => ({
+                id: index + 1, // Use index + 1 for ID
+                fullName: `${user.firstName} ${user.lastName}`,
+                email: user.email,
+                role: user.role,
+                status: user.status,
+            }));
+        }
+        return [];
+    }, [data]);
 
     const columns = useMemo(() => [
         {
@@ -48,11 +71,6 @@ const ListNewAdmin = () => {
             size: 200,
         },
         {
-            accessorKey: 'phoneNumber',
-            header: 'Phone Number',
-            size: 100,
-        },
-        {
             accessorKey: 'role',
             header: 'Role',
             size: 100,
@@ -66,7 +84,7 @@ const ListNewAdmin = () => {
 
     const table = useMaterialReactTable({
         columns,
-        data: adminData, // Use filtered admin users
+        data: formattedData, // Use the formatted data
         enableRowActions: false,
         enableColumnFilterModes: true,
         enableColumnOrdering: true,
@@ -92,25 +110,22 @@ const ListNewAdmin = () => {
         // Logic to open a modal or form to add a new user
     };
 
-    if (isLoading) return <div>Loading...</div>;
-    if (isError) return <div>Error fetching users.</div>;
-
     return (
         <>
             <div className="flex justify-between my-4 items-center">
-                <p className="ms-4 text-2xl font-semibold text-gray-800">Admins</p>
+                <p className="ms-4 text-2xl font-semibold text-gray-800">
+                    <span onClick={() => navigate("/")}> <svg xmlns="http://www.w3.org/2000/svg" width="8" height="16" viewBox="0 0 12 24">
+                        <path fill="#737791" fill-rule="evenodd" d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z" />
+                    </svg> </span> Admins</p>
                 <Button
                     onClick={handleClickOpenAdd}
                     variant="contained"
                     color="primary"
                     sx={{ backgroundColor: '#CB771C', '&:hover': { backgroundColor: '#A85C14' } }}
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" className="mr-2">
-                        <path fill="white" d="M12.75 7a.75.75 0 0 0-1.5 0v4.25H7a.75.75 0 0 0 0 1.5h4.25V17a.75.75 0 0 0 1.5 0v-4.25H17a.75.75 0 0 0 0-1.5h-4.25z"></path>
-                    </svg>
                     Add User
                 </Button>
-            </div>
+            </div >
             <MaterialReactTable table={table} />
         </>
     );

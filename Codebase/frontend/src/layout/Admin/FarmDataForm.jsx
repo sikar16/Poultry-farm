@@ -1,31 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Button, TextField, Typography, Paper } from '@mui/material';
-import { useNavigate, useLocation as useReactRouterLocation } from 'react-router-dom'; // Rename the imported useLocation
+import { useNavigate, useLocation as useReactRouterLocation } from 'react-router-dom';
 import { useAddNewFarmdataMutation } from '../../service/FarmDataFormApi';
 
 function FarmDataForm() {
-    const location = useReactRouterLocation(); // Use the renamed variable
-    const { selectedPlan } = location.state || {}; // Access selectedPlan from state
+    const reactRouterLocation = useReactRouterLocation(); // Rename to avoid conflict
+    const { selectedPlan } = reactRouterLocation.state || {}; // Access selectedPlan from state
+
     const [farmName, setFarmName] = useState('');
-    const [farmLocation, setFarmLocation] = useState(''); // Renamed to avoid confusion
-    const [subscriptionPlan, setSubscriptionPlan] = useState('');
-    const [numOfBirds, setnumOfBirds] = useState('');
+    const [farmLocation, setFarmLocation] = useState(''); // Renamed for clarity
+    const [subscriptionPlan, setsubscriptionPlan] = useState('');
+    const [numOfBirds, setnumOfBirds] = useState();
     const [addFarmData, { isError, isLoading, error }] = useAddNewFarmdataMutation();
     const navigate = useNavigate();
 
-    // console.log(selectedPlan)
-
     useEffect(() => {
         if (selectedPlan) {
-            setSubscriptionPlan(selectedPlan.id); // Set the subscription plan from the selected plan
+            setsubscriptionPlan(selectedPlan.id); // Set the subscriptionPlan plan from the selected plan
         }
     }, [selectedPlan]);
 
     const resetForm = () => {
         setFarmName('');
-        setFarmLocation(''); // Resetting the renamed location
-        setSubscriptionPlan('');
-        setnumOfBirds('');
+        setFarmLocation('');
+        setsubscriptionPlan('');
+        setnumOfBirds();
     };
 
     const handleSubmit = async (event) => {
@@ -38,16 +37,11 @@ function FarmDataForm() {
             numOfBirds,
         };
 
-
-
         console.log(farmData)
 
         try {
-            console.log(farmData)
             const response = await addFarmData(farmData).unwrap();
-            console.log(response.data.paymentLink.data.checkout_url)
             const url = response.data.paymentLink.data.checkout_url;
-            // if (url)
 
             if (url) {
                 console.log('Redirecting to:', url);
@@ -55,8 +49,6 @@ function FarmDataForm() {
             } else {
                 console.error('URL not found in the response.');
             }
-            // resetForm();
-            // navigate("/admin/");
         } catch (err) {
             alert(`Submission failed: ${err.message || error}`);
         }
@@ -86,18 +78,18 @@ function FarmDataForm() {
                         margin="normal"
                     />
                     <TextField
-                        label="Subscription Plan"
+                        label="subscriptionPlan Plan"
                         value={subscriptionPlan}
-                        onChange={(e) => setSubscriptionPlan(e.target.value)}
+                        onChange={(e) => setsubscriptionPlan(e.target.value)}
                         required
                         fullWidth
                         margin="normal"
                         disabled // Disable the input since it should be set from the selected plan
                     />
                     <TextField
-                        label="Number of birds"
+                        label="Number of Birds"
                         value={numOfBirds}
-                        onChange={(e) => setnumOfBirds(e.target.value)}
+                        onChange={(e) => setnumOfBirds(Number(e.target.value))}
                         required
                         type='number'
                         fullWidth

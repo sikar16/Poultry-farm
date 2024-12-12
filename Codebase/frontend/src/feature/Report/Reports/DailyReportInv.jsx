@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function DailyReport() {
+export default function DailyReportInv() {
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0], // Default to today's date
     collectedEggs: '',
@@ -11,9 +11,14 @@ export default function DailyReport() {
   });
 
   useEffect(() => {
-    
-    const netEggs = Math.max((formData.collectedEggs || 0) - (formData.badEggs || 0), 0);
-    setFormData((prev) => ({ ...prev, netEggs }));
+    const collected = parseFloat(formData.collectedEggs) || 0;
+    const bad = parseFloat(formData.badEggs) || 0;
+
+    // Calculate net eggs only if both values are greater than zero
+    if (collected > 0 && bad >= 0) {
+      const netEggs = Math.max(collected - bad, 0);
+      setFormData((prev) => ({ ...prev, netEggs }));
+    }
   }, [formData.collectedEggs, formData.badEggs]);
 
   const handleChange = (e) => {
@@ -26,6 +31,16 @@ export default function DailyReport() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const collected = parseFloat(formData.collectedEggs);
+    const bad = parseFloat(formData.badEggs);
+
+    // Validate that collected and bad eggs are greater than zero
+    if (collected <= 0 || bad < 0) {
+      alert('Collected eggs must be greater than 0 and bad eggs must be 0 or greater.');
+      return;
+    }
+
     console.log('Form submitted:', formData);
     // Send the formData to the backend API
   };
@@ -55,6 +70,7 @@ export default function DailyReport() {
               value={formData.collectedEggs}
               onChange={handleChange}
               required
+              min="1"
               className="border border-gray-300 rounded-md p-2 focus:outline-none focus:border-[#CB771C] transition"
             />
           </label>
@@ -67,6 +83,7 @@ export default function DailyReport() {
               value={formData.badEggs}
               onChange={handleChange}
               required
+              min="0" // Ensure the minimum value is 0
               className="border border-gray-300 rounded-md p-2 focus:outline-none focus:border-[#CB771C] transition"
             />
           </label>
@@ -90,6 +107,7 @@ export default function DailyReport() {
               value={formData.feedConsumed}
               onChange={handleChange}
               required
+              min="1" // Ensure the minimum value is 1
               className="border border-gray-300 rounded-md p-2 focus:outline-none focus:border-[#CB771C] transition"
             />
           </label>
@@ -104,7 +122,7 @@ export default function DailyReport() {
               className="border border-gray-300 rounded-md p-2 focus:outline-none focus:border-[#CB771C] transition"
             />
           </label>
-          
+
           <button
             type="submit"
             className="mt-4 bg-[#CB771C] text-white font-bold rounded-md p-2 hover:bg-[#b66f0f] transition"

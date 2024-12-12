@@ -5,12 +5,14 @@ import Report from '../../feature/Report/Report';
 import DashboardAnalaysis from '../../feature/Dashboard/DashboardAnalaysis';
 import ListNewAdmin from './ListNewAdmin';
 import DashboardAnalysis from '../../feature/Dashboard/DashboardAnalaysis';
+import Bottom from '../../component/Bottem';
+import { useAuth } from '../../context/AuthContext';
 
 
 const DashboardSA = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [activeContent, setActiveContent] = useState('Dashborad');
-
+    const { isLoggedIn } = useAuth()
 
     const toggleDrawer = () => {
         setIsOpen(!isOpen);
@@ -20,17 +22,16 @@ const DashboardSA = () => {
         setActiveContent(content);
     };
 
+
+
     return (
         <div className="flex">
             <div
                 className={`fixed top-0 left-0 z-40 w-64 h-screen p-3 overflow-y-auto transition-transform border-r-2  ${isOpen ? 'translate-x-0' : '-translate-x-full'} bg-white `}
                 aria-labelledby="drawer-navigation-label" >
                 <div id="drawer-navigation-label" className="text-base font-semibold flex align-middle items-center text-center gap-4 text-gray-500 ">
-                    <div className="flex items-center justify-center bg-[#CB771C] rounded-full w-12 h-12">
-                        <div className="flex  items-center">
-                            <span className="text-xl font-bold text-white"></span>
-                            <span className="text-xl font-bold text-white"></span>
-                        </div>
+                    <div className="bg-[#CB771C] w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold">
+                        🐔
                     </div>
                     <div>
                         <p className='text-xl text-black'> doroSAAS</p>
@@ -62,6 +63,13 @@ const DashboardSA = () => {
                                         </path></svg>
                                 </p>
                                 <span className="flex-1 ms-3 ">User</span>
+                            </button>
+                        </li>
+                        <li className='flex '>
+                            <button
+                                className={`flex items-center py-2 px-4 rounded-lg w-full text-left ${activeContent === 'User' ? 'bg-[#CB771C] text-white ' : 'text-gray-900  hover:bg-gray-100 '}`}
+                            >
+                                <Bottom />
                             </button>
                         </li>
 
